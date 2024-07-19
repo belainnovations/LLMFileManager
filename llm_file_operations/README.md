@@ -13,7 +13,7 @@ pip install llm_file_operations
 Alternatively, you can clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/llm_file_operations.git
+git clone https://github.com/belainnovations/LLMFileManager
 cd llm_file_operations
 pip install -r requirements.txt
 ```
