@@ -1,0 +1,21 @@
+Additional Usage Terms for LLM File Operations
+
+These additional usage terms supplement the MIT License under which the LLM File Operations project is distributed.
+
+TestPyPI Usage Restriction
+
+1. Use of any version of LLM File Operations uploaded to TestPyPI (https://test.pypi.org) is strictly prohibited for any purpose other than testing and evaluation by the project maintainers and authorized contributors.
+
+2. Only versions of LLM File Operations that are officially released and available on the main PyPI repository (https://pypi.org) are permitted for general use, as per the terms of the MIT License.
+
+3. Any use, reproduction, or distribution of versions found on TestPyPI without explicit permission from the project maintainers is a violation of these usage terms.
+
+Enforcement
+
+Violation of these usage terms may result in legal action and the revocation of your rights to use, modify, or distribute LLM File Operations under the MIT License.
+
+Contact
+
+If you have any questions about these usage terms or need to request permission for TestPyPI usage, please contact the project maintainers at bela.komoroczy@belainnovations.com.
+
+Last updated: 2024.07.18

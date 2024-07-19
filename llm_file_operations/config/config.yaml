@@ -1,0 +1,25 @@
+# LLM File Operations Configuration
+
+# Version of the configuration file
+version: "1.0"
+
+# Root directory for file operations (relative to the project root)
+# Use "." for the current directory
+project_root: "."
+
+# Interval (in seconds) for checking clipboard changes
+clipboard_check_interval: 0.5
+
+# Logging configuration
+logging:
+  level: "DEBUG"  # Options: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "%(asctime)s - %(levelname)s - %(message)s"
+
+# File operation settings
+file_operations:
+  max_file_size: 10485760  # Maximum file size for operations (in bytes, default: 10MB)
+  allowed_extensions: [".txt", ".py", ".md", ".yaml", ".json"]  # List of allowed file extensions
+
+# Security settings
+security:
+  execution_key: "EXECUTE_LLM_INSTRUCTION"  # Required key for executing instructions
