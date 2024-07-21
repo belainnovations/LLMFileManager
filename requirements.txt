@@ -1,2 +1,13 @@
 pyperclip
 pyyaml
+anthropic
+
+# Testing dependencies
+pytest
+pytest-mock
+pytest-cov
+
+# Development tools
+black
+flake8
+mypy
