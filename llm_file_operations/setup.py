@@ -11,7 +11,7 @@ setup(
     description="A tool for performing file operations using LLM-generated instructions",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/llm_file_operations",
+    url="https://github.com/belainnovations/LLMFileManager",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 3 - Alpha",

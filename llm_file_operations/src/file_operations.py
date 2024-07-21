@@ -4,23 +4,31 @@ import logging
 logger = logging.getLogger(__name__)
 
 class FileOperator:
-    def __init__(self, context_matcher, error_handler):
+    def __init__(self, context_matcher, error_handler, config):
         self.context_matcher = context_matcher
         self.error_handler = error_handler
+        self.config = config
 
     def execute(self, instruction):
         logger.debug(f"Executing instruction: {instruction}")
         action = instruction.get('action')
-        file_path = instruction.get('file')
-
-        logger.debug(f"Action: {action}, File: {file_path}")
-
-        if not file_path:
-            return self.error_handler.handle_error("Missing 'file' in instruction")
-
-        if not action:
-            return self.error_handler.handle_error("Missing 'action' in instruction")
-
+        relative_path = instruction.get('file')
+        project_root = self.config.get('project_root', '.')
+        file_path = os.path.join(project_root, relative_path)
+    
+        max_file_size = self.config.get('file_operations', {}).get('max_file_size', 10485760)
+        allowed_extensions = self.config.get('file_operations', {}).get('allowed_extensions', [])
+    
+        # Skip extension check for folder operations
+        if action.upper() not in ['CREATE_FOLDER', 'DELETE_FOLDER']:
+            # Add checks for file size and extensions
+            if os.path.exists(file_path) and os.path.getsize(file_path) > max_file_size:
+                return self.error_handler.handle_error(f"File size exceeds maximum allowed size: {file_path}")
+    
+            _, file_extension = os.path.splitext(file_path)
+            if allowed_extensions and file_extension not in allowed_extensions:
+                return self.error_handler.handle_error(f"File extension not allowed: {file_extension}")
+    
         if action.upper() == 'CREATE_FILE':
             return self.create_file(file_path, instruction.get('code', ''))
         elif action.upper() == 'CREATE_FOLDER':

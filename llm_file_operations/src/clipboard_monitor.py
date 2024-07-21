@@ -6,14 +6,16 @@ import binascii
 logger = logging.getLogger(__name__)
 
 class ClipboardMonitor:
-    def __init__(self, instruction_parser, file_operator, error_handler):
+    def __init__(self, instruction_parser, file_operator, error_handler, config):
         self.instruction_parser = instruction_parser
         self.file_operator = file_operator
         self.error_handler = error_handler
+        self.config = config
         self.previous_content = ''
 
     def start_monitoring(self):
         logger.info("Starting clipboard monitoring...")
+        check_interval = self.config.get('clipboard_check_interval', 0.5)
         while True:
             try:
                 clipboard_content = pyperclip.paste()
@@ -21,7 +23,7 @@ class ClipboardMonitor:
                     logger.debug(f"New clipboard content detected. Length: {len(clipboard_content)}")
                     logger.debug(f"First 100 chars: {clipboard_content[:100]}")
                     logger.debug(f"Hexdump of first 20 bytes: {binascii.hexlify(clipboard_content[:20].encode()).decode()}")
-
+    
                     format_type = self.detect_format(clipboard_content)
                     if format_type:
                         logger.info(f"Detected {format_type} format instruction")
@@ -35,9 +37,9 @@ class ClipboardMonitor:
                             logger.debug("No valid LLM operation found in clipboard content.")
                     else:
                         logger.debug("No valid LLM operation format detected in clipboard content.")
-
+    
                     self.previous_content = clipboard_content
-                time.sleep(0.5)
+                time.sleep(check_interval)
             except Exception as e:
                 logger.error(f"An error occurred: {str(e)}", exc_info=True)
                 if "YAML" in str(e):

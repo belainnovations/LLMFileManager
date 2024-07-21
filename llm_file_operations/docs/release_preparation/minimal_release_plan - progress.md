@@ -5,13 +5,13 @@
    - Add a concise quick start guide
    - Include basic usage examples
 
-## Packaging
-1. Create a `setup.py` file for packaging
-2. Publish the package on TestPyPI for initial testing
-
 ## Testing
 1. Implement basic unit tests for core functionality
-2. Test package installation and functionality using TestPyPI
+2. Publish the package on TestPyPI for initial testing
+3. Test package installation and functionality using TestPyPI
+
+## Packaging - done
+1. Create a `setup.py` file for packaging
 
 ## Publish
 1. After successful testing, publish the package on PyPI

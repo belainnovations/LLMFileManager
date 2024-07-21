@@ -1,3 +1,10 @@
+import yaml
+
+def load_config():
+    config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'config', 'config.yaml')
+    with open(config_path, 'r') as config_file:
+        return yaml.safe_load(config_file)
+
 import os
 import logging
 from instruction_parser import InstructionParser
@@ -14,15 +21,17 @@ def main():
     logger.info(f"Current working directory: {os.getcwd()}")
 
     try:
+        config = load_config()
         instruction_parser = InstructionParser(use_yaml=True)
         context_matcher = ContextMatcher()
         error_handler = ErrorHandler()
-        file_operator = FileOperator(context_matcher, error_handler)
+        file_operator = FileOperator(context_matcher, error_handler, config)
 
         monitor = ClipboardMonitor(
             instruction_parser,
             file_operator,
-            error_handler
+            error_handler,
+            config
         )
 
         monitor.start_monitoring()

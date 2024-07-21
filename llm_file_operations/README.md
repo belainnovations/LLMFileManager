@@ -89,6 +89,19 @@ LLMOP:
         return f"{greeting}, {name}!"
 ```
 
+
+## Configuration
+
+The `config.yaml` file in the `config` directory allows you to customize various settings. When specifying paths in the configuration, use double backslashes for Windows paths:
+
+```yaml
+# Root directory for file operations (relative to the project root)
+# Use "." for the current directory
+project_root: "llm_file_operations\\docs"
+```
+
+This ensures proper path handling across different operating systems.
+
 ## Running from Different Directories
 
 After installing LLM File Operations via pip, you can run it from any directory:
