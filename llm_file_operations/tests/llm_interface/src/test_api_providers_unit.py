@@ -1,6 +1,8 @@
 import pytest
 from unittest.mock import Mock, patch
 from api_providers import AnthropicProvider
+from anthropic import APIError
+from httpx import Request
 
 @pytest.fixture
 def mock_anthropic_client():
@@ -24,14 +26,16 @@ def test_generate_response_success(mock_anthropic_client):
     mock_anthropic_client.return_value.messages.create.assert_called_once()
 
 def test_generate_response_api_error(mock_anthropic_client):
-    from anthropic import APIError
-    mock_anthropic_client.return_value.messages.create.side_effect = APIError("API Error")
+    mock_request = Request('POST', 'https://api.anthropic.com/v1/messages')
+    mock_anthropic_client.return_value.messages.create.side_effect = APIError("API Error", request=mock_request, body=None)
 
     provider = AnthropicProvider('test_api_key')
-    with pytest.raises(Exception) as exc_info:
+    with pytest.raises(APIError) as exc_info:
         provider.generate_response([{"role": "user", "content": "Test message"}])
 
-    assert str(exc_info.value) == "Anthropic API error: API Error"
+    assert str(exc_info.value) == "API Error"
+    assert exc_info.value.request.method == mock_request.method
+    assert exc_info.value.request.url == mock_request.url
 
 def test_generate_response_unexpected_error(mock_anthropic_client):
     mock_anthropic_client.return_value.messages.create.side_effect = Exception("Unexpected Error")

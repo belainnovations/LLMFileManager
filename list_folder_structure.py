@@ -2,6 +2,10 @@ import os
 
 def list_directory_structure(startpath):
     for root, dirs, files in os.walk(startpath):
+        if '.git' in dirs:
+            dirs.remove('.git')
+        if '.hg' in dirs:
+            dirs.remove('.hg')
         level = root.replace(startpath, '').count(os.sep)
         indent = ' ' * 4 * level
         print(f"{indent}{os.path.basename(root)}/")

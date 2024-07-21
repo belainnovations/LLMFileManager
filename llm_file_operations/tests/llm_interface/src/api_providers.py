@@ -1,4 +1,6 @@
 import anthropic
+from anthropic import APIError, APIConnectionError, APITimeoutError
+from httpx import Request
 from abc import ABC, abstractmethod
 
 class LLMProvider(ABC):
@@ -19,9 +21,15 @@ class AnthropicProvider(LLMProvider):
                 messages=messages
             )
             return response.content[0].text
-        except anthropic.APIError as e:
+        except APIError as e:
             # Handle API errors (e.g., rate limiting, authentication issues)
-            raise Exception(f"Anthropic API error: {str(e)}")
+            raise APIError(str(e), Request('POST', 'https://api.anthropic.com/v1/messages'), body=None)
+        except APIConnectionError as e:
+            # Handle connection errors
+            raise APIConnectionError(message=str(e), request=Request('POST', 'https://api.anthropic.com/v1/messages'))
+        except APITimeoutError as e:
+            # Handle timeout errors
+            raise APITimeoutError(request=Request('POST', 'https://api.anthropic.com/v1/messages'))
         except Exception as e:
             # Handle other unexpected errors
             raise Exception(f"Unexpected error: {str(e)}")
