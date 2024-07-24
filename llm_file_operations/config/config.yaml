@@ -18,7 +18,7 @@ logging:
 # File operation settings
 file_operations:
   max_file_size: 10485760  # Maximum file size for operations (in bytes, default: 10MB)
-  allowed_extensions: [".txt", ".py", ".md", ".yaml", ".json"]  # List of allowed file extensions
+  allowed_extensions: [".txt", ".py", ".md", ".yaml", ".json", ".puml", ".svg"]  # List of allowed file extensions
 
 # Security settings
 security:

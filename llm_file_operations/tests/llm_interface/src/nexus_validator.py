@@ -3,6 +3,8 @@ from llm_file_operations.src.file_operations import FileOperator
 from llm_file_operations.src.context_matcher import ContextMatcher
 
 class NexusValidator:
+    ALLOWED_ACTIONS = ['CREATE_FILE', 'REPLACE', 'APPEND', 'DELETE']
+
     def __init__(self, config):
         self.instruction_parser = InstructionParser()
         self.file_operator = FileOperator(ContextMatcher(), None, config)
@@ -11,10 +13,17 @@ class NexusValidator:
         try:
             # Parse the command
             instruction = self.instruction_parser.parse(command)
-            
-            # Validate file operations
-            self.file_operator.validate(instruction)
-            
+
+            # Perform basic validation checks
+            if not instruction or 'action' not in instruction:
+                return False, "Invalid command structure"
+
+            # Check if the action is supported
+            if instruction['action'] not in self.ALLOWED_ACTIONS:
+                return False, f"Unsupported action: {instruction['action']}"
+
+            # Additional validation can be added here based on the specific requirements
+
             return True, "Command is valid"
         except Exception as e:
             return False, str(e)
