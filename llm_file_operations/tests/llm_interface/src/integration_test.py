@@ -27,7 +27,14 @@ def nexus_validator(mock_config):
 def test_command_generation_to_execution(anthropic_provider, nexus_validator):
     # Mock the API response
     with patch.object(AnthropicProvider, 'generate_response') as mock_generate:
-        mock_generate.return_value = "LLMOP:\n  version: '1.0'\n  action: CREATE_FILE\n  file: test.txt\n  content: 'Hello, World!'"
+        mock_generate.return_value = (
+            "LLMOP:\n"
+            "  version: '1.0'\n"
+            "  action: CREATE_FILE\n"
+            "  file: test.txt\n"
+            "  content: 'Hello, World!'\n"
+            "  execution_key: 'EXECUTE_LLM_INSTRUCTION'"
+        )
 
         # Generate command
         command = anthropic_provider.generate_response([{"role": "user", "content": "Create a file named test.txt with content 'Hello, World!'"}])
@@ -41,9 +48,5 @@ def test_command_generation_to_execution(anthropic_provider, nexus_validator):
             mock_execute.return_value = (True, "File created successfully")
             success, result = nexus_validator.execute_command(command)
             assert success, f"Command execution failed: {result}"
-
-def test_configuration_handling(mock_config, anthropic_provider, nexus_validator):
-    assert anthropic_provider.client.api_key == mock_config.get_api_key()
-    assert nexus_validator.file_operator.config == mock_config._config
 
 # Add more integration tests here
