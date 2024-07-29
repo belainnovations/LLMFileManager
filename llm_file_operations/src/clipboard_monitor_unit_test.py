@@ -49,9 +49,10 @@ def test_start_monitoring_new_content(mock_paste, mock_dependencies):
     mock_dependencies['instruction_parser'].parse.assert_called_once()
     mock_dependencies['file_operator'].execute.assert_called_once()
 
+@pytest.mark.usefixtures("capsys")
 @patch('clipboard_monitor.pyperclip.paste')
 @patch('clipboard_monitor.logger')
-def test_start_monitoring_error_handling(mock_logger, mock_paste, mock_dependencies):
+def test_start_monitoring_error_handling(mock_logger, mock_paste, mock_dependencies, capsys):
     """
     Test error handling in the start_monitoring method.
     """
@@ -65,10 +66,9 @@ def test_start_monitoring_error_handling(mock_logger, mock_paste, mock_dependenc
     mock_logger.error.assert_called_with("An error occurred: Test error", exc_info=True)
 
     # Check if the error message was printed to console
-    assert "An error occurred. Check the log for details." in capsys.readouterr().out
+    captured = capsys.readouterr()
+    assert "An error occurred. Check the log for details." in captured.out
 
-@pytest.fixture
-def capsys():
-    return pytest.fixture(autouse=True)(lambda: None)
+# Remove the custom capsys fixture as it's no longer needed
 
 # Add more test cases as needed

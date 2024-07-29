@@ -18,20 +18,11 @@ src/clipboard_monitor_unit_test.py::test_detect_format[LLMOP:\n  version: '1.0'-
 src/clipboard_monitor_unit_test.py::test_detect_format[###LLMOP_START###\nSome content-custom] PASSED                                                                [ 50%]
 src/clipboard_monitor_unit_test.py::test_detect_format[Invalid content-None] PASSED                                                                                  [ 66%]
 src/clipboard_monitor_unit_test.py::test_start_monitoring_new_content PASSED                                                                                         [ 83%]
-src/clipboard_monitor_unit_test.py::test_start_monitoring_error_handling FAILED                                                                                      [100%]
+src/clipboard_monitor_unit_test.py::test_start_monitoring_error_handling PASSED                                                                                      [100%]
 
-================================================================================ FAILURES =================================================================================
-__________________________________________________________________ test_start_monitoring_error_handling ___________________________________________________________________
-src\clipboard_monitor_unit_test.py:68: in test_start_monitoring_error_handling
-    assert "An error occurred. Check the log for details." in capsys.readouterr().out
-E   AttributeError: 'function' object has no attribute 'readouterr'
--------------------------------------------------------------------------- Captured stdout call ---------------------------------------------------------------------------
-An error occurred. Check the log for details.
-========================================================================= short test summary info =========================================================================
-FAILED src/clipboard_monitor_unit_test.py::test_start_monitoring_error_handling - AttributeError: 'function' object has no attribute 'readouterr'
-======================================================================= 1 failed, 5 passed in 2.25s =======================================================================
+============================================================================ 6 passed in 1.43s ============================================================================
 
-Exit Code: 1
+Exit Code: 0
 
 ================================================================================
 
@@ -51,20 +42,11 @@ src/clipboard_monitor_unit_test.py::test_detect_format[LLMOP:\n  version: '1.0'-
 src/clipboard_monitor_unit_test.py::test_detect_format[###LLMOP_START###\nSome content-custom] PASSED                                                                [ 50%]
 src/clipboard_monitor_unit_test.py::test_detect_format[Invalid content-None] PASSED                                                                                  [ 66%]
 src/clipboard_monitor_unit_test.py::test_start_monitoring_new_content PASSED                                                                                         [ 83%]
-src/clipboard_monitor_unit_test.py::test_start_monitoring_error_handling FAILED                                                                                      [100%]
+src/clipboard_monitor_unit_test.py::test_start_monitoring_error_handling PASSED                                                                                      [100%]
 
-================================================================================ FAILURES =================================================================================
-__________________________________________________________________ test_start_monitoring_error_handling ___________________________________________________________________
-src\clipboard_monitor_unit_test.py:68: in test_start_monitoring_error_handling
-    assert "An error occurred. Check the log for details." in capsys.readouterr().out
-E   AttributeError: 'function' object has no attribute 'readouterr'
--------------------------------------------------------------------------- Captured stdout call ---------------------------------------------------------------------------
-An error occurred. Check the log for details.
-========================================================================= short test summary info =========================================================================
-FAILED src/clipboard_monitor_unit_test.py::test_start_monitoring_error_handling - AttributeError: 'function' object has no attribute 'readouterr'
-======================================================================= 1 failed, 5 passed in 1.17s =======================================================================
+============================================================================ 6 passed in 1.17s ============================================================================
 
-Exit Code: 1
+Exit Code: 0
 
 ================================================================================
 
@@ -84,20 +66,11 @@ src/clipboard_monitor_unit_test.py::test_detect_format[LLMOP:\n  version: '1.0'-
 src/clipboard_monitor_unit_test.py::test_detect_format[###LLMOP_START###\nSome content-custom] PASSED                                                                [ 50%]
 src/clipboard_monitor_unit_test.py::test_detect_format[Invalid content-None] PASSED                                                                                  [ 66%]
 src/clipboard_monitor_unit_test.py::test_start_monitoring_new_content PASSED                                                                                         [ 83%]
-src/clipboard_monitor_unit_test.py::test_start_monitoring_error_handling FAILED                                                                                      [100%]
+src/clipboard_monitor_unit_test.py::test_start_monitoring_error_handling PASSED                                                                                      [100%]
 
-================================================================================ FAILURES =================================================================================
-__________________________________________________________________ test_start_monitoring_error_handling ___________________________________________________________________
-src\clipboard_monitor_unit_test.py:68: in test_start_monitoring_error_handling
-    assert "An error occurred. Check the log for details." in capsys.readouterr().out
-E   AttributeError: 'function' object has no attribute 'readouterr'
--------------------------------------------------------------------------- Captured stdout call ---------------------------------------------------------------------------
-An error occurred. Check the log for details.
-========================================================================= short test summary info =========================================================================
-FAILED src/clipboard_monitor_unit_test.py::test_start_monitoring_error_handling - AttributeError: 'function' object has no attribute 'readouterr'
-======================================================================= 1 failed, 5 passed in 1.16s =======================================================================
+============================================================================ 6 passed in 1.15s ============================================================================
 
-Exit Code: 1
+Exit Code: 0
 
 ================================================================================
 
@@ -117,20 +90,11 @@ src/clipboard_monitor_unit_test.py::test_detect_format[LLMOP:\n  version: '1.0'-
 src/clipboard_monitor_unit_test.py::test_detect_format[###LLMOP_START###\nSome content-custom] PASSED                                                                [ 50%]
 src/clipboard_monitor_unit_test.py::test_detect_format[Invalid content-None] PASSED                                                                                  [ 66%]
 src/clipboard_monitor_unit_test.py::test_start_monitoring_new_content PASSED                                                                                         [ 83%]
-src/clipboard_monitor_unit_test.py::test_start_monitoring_error_handling FAILED                                                                                      [100%]
+src/clipboard_monitor_unit_test.py::test_start_monitoring_error_handling PASSED                                                                                      [100%]
 
-================================================================================ FAILURES =================================================================================
-__________________________________________________________________ test_start_monitoring_error_handling ___________________________________________________________________
-src\clipboard_monitor_unit_test.py:68: in test_start_monitoring_error_handling
-    assert "An error occurred. Check the log for details." in capsys.readouterr().out
-E   AttributeError: 'function' object has no attribute 'readouterr'
--------------------------------------------------------------------------- Captured stdout call ---------------------------------------------------------------------------
-An error occurred. Check the log for details.
-========================================================================= short test summary info =========================================================================
-FAILED src/clipboard_monitor_unit_test.py::test_start_monitoring_error_handling - AttributeError: 'function' object has no attribute 'readouterr'
-======================================================================= 1 failed, 5 passed in 1.16s =======================================================================
+============================================================================ 6 passed in 1.14s ============================================================================
 
-Exit Code: 1
+Exit Code: 0
 
 ================================================================================
 
@@ -150,20 +114,11 @@ src/clipboard_monitor_unit_test.py::test_detect_format[LLMOP:\n  version: '1.0'-
 src/clipboard_monitor_unit_test.py::test_detect_format[###LLMOP_START###\nSome content-custom] PASSED                                                                [ 50%]
 src/clipboard_monitor_unit_test.py::test_detect_format[Invalid content-None] PASSED                                                                                  [ 66%]
 src/clipboard_monitor_unit_test.py::test_start_monitoring_new_content PASSED                                                                                         [ 83%]
-src/clipboard_monitor_unit_test.py::test_start_monitoring_error_handling FAILED                                                                                      [100%]
+src/clipboard_monitor_unit_test.py::test_start_monitoring_error_handling PASSED                                                                                      [100%]
 
-================================================================================ FAILURES =================================================================================
-__________________________________________________________________ test_start_monitoring_error_handling ___________________________________________________________________
-src\clipboard_monitor_unit_test.py:68: in test_start_monitoring_error_handling
-    assert "An error occurred. Check the log for details." in capsys.readouterr().out
-E   AttributeError: 'function' object has no attribute 'readouterr'
--------------------------------------------------------------------------- Captured stdout call ---------------------------------------------------------------------------
-An error occurred. Check the log for details.
-========================================================================= short test summary info =========================================================================
-FAILED src/clipboard_monitor_unit_test.py::test_start_monitoring_error_handling - AttributeError: 'function' object has no attribute 'readouterr'
-======================================================================= 1 failed, 5 passed in 1.16s =======================================================================
+============================================================================ 6 passed in 1.14s ============================================================================
 
-Exit Code: 1
+Exit Code: 0
 
 ================================================================================
 
