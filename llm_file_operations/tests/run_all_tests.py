@@ -27,7 +27,7 @@ def generate_test_report(exit_codes, outputs):
         for i, (exit_code, output) in enumerate(zip(exit_codes, outputs), 1):
             report_file.write(f"## Test Run {i}\n\n")
             report_file.write("### Test Results\n\n")
-            report_file.write(output)
+            report_file.write(output.replace('\\', '/'))  # Replace backslashes with forward slashes
             report_file.write(f"\nExit Code: {exit_code}\n\n")
             report_file.write("="*80 + "\n\n")
 
