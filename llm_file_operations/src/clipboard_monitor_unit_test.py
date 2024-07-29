@@ -60,7 +60,18 @@ def test_start_monitoring_error_handling(mock_paste, mock_dependencies):
     with pytest.raises(KeyboardInterrupt):
         monitor.start_monitoring()
 
-    mock_dependencies['error_handler'].assert_called_once()
+    # Check if the error was logged
+    mock_dependencies['error_handler'].error.assert_called_once_with(
+        "An error occurred: Test error", exc_info=True
+    )
+
+    # Check if the error message was printed to console
+    captured = capsys.readouterr()
+    assert "An error occurred. Check the log for details." in captured.out
+
+@pytest.fixture
+def capsys():
+    return pytest.fixture(autouse=True)(lambda: None)
 
 def test_clipboard_check_interval(mock_dependencies):
     """
