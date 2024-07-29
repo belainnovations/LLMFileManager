@@ -12,11 +12,13 @@ def get_version():
 
 def generate_test_report(exit_codes, outputs):
     version = get_version()
-    date = datetime.now().strftime("%Y-%m-%d")
+    now = datetime.now()
+    date = now.strftime("%Y-%m-%d")
+    time_prefix = now.strftime("%Y%m%d_%H%M")
     report_dir = os.path.join("tests", "test_reports", date)
     os.makedirs(report_dir, exist_ok=True)
 
-    report_filename = f"test_report_v{version}.md"
+    report_filename = f"{time_prefix}_test_report_v{version}.md"
     report_path = os.path.join(report_dir, report_filename)
 
     with open(report_path, "w") as report_file:
