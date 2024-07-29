@@ -41,13 +41,13 @@ class ClipboardMonitor:
                     self.previous_content = clipboard_content
                 time.sleep(check_interval)
             except Exception as e:
-                error_message = f"An error occurred: {str(e)}"
-                logger.error(error_message, exc_info=True)
+                logger.error(f"An error occurred: {str(e)}", exc_info=True)
                 if "YAML" in str(e):
                     logger.error("YAML parsing error. Please check the format of your instruction.")
-                self.error_handler.handle(error_message)
                 print("An error occurred. Check the log for details.")
                 time.sleep(1)  # Add a small delay to prevent rapid error logging
+
+    def detect_format(self, content):
         content = content.strip()  # Remove leading/trailing whitespace
         if content.startswith("###LLMOP_START###"):
             return "custom"
