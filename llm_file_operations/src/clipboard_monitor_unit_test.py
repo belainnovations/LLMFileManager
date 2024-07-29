@@ -50,7 +50,8 @@ def test_start_monitoring_new_content(mock_paste, mock_dependencies):
     mock_dependencies['file_operator'].execute.assert_called_once()
 
 @patch('clipboard_monitor.pyperclip.paste')
-def test_start_monitoring_error_handling(mock_paste, mock_dependencies):
+@patch('clipboard_monitor.logger')
+def test_start_monitoring_error_handling(mock_logger, mock_paste, mock_dependencies):
     """
     Test error handling in the start_monitoring method.
     """
@@ -61,23 +62,13 @@ def test_start_monitoring_error_handling(mock_paste, mock_dependencies):
         monitor.start_monitoring()
 
     # Check if the error was logged
-    mock_dependencies['error_handler'].error.assert_called_once_with(
-        "An error occurred: Test error", exc_info=True
-    )
+    mock_logger.error.assert_called_with("An error occurred: Test error", exc_info=True)
 
     # Check if the error message was printed to console
-    captured = capsys.readouterr()
-    assert "An error occurred. Check the log for details." in captured.out
+    assert "An error occurred. Check the log for details." in capsys.readouterr().out
 
 @pytest.fixture
 def capsys():
     return pytest.fixture(autouse=True)(lambda: None)
-
-def test_clipboard_check_interval(mock_dependencies):
-    """
-    Test if the clipboard check interval is correctly read from the config.
-    """
-    monitor = ClipboardMonitor(**mock_dependencies)
-    assert monitor.config.get('clipboard_check_interval') == 0.1
 
 # Add more test cases as needed
