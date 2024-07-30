@@ -24,15 +24,11 @@ class FileOperator:
             # Add checks for file size and extensions
             if os.path.exists(file_path) and os.path.getsize(file_path) > max_file_size:
                 return self.error_handler.handle_error(f"File size exceeds maximum allowed size: {file_path}")
-    
-            _, file_extension = os.path.splitext(file_path)
-            if allowed_extensions and file_extension not in allowed_extensions:
+        
+            file_name = os.path.basename(file_path)
+            file_extension = file_name.split('.')[-1] if '.' in file_name else ''
+            if allowed_extensions and f".{file_extension}" not in allowed_extensions:
                 return self.error_handler.handle_error(f"File extension not allowed: {file_extension}")
-    
-        if action.upper() == 'CREATE_FILE':
-            return self.create_file(file_path, instruction.get('code', ''))
-        elif action.upper() == 'CREATE_FOLDER':
-            return self.create_folder(file_path)
         elif action.upper() == 'DELETE_FILE':
             return self.delete_file(file_path)
         elif action.upper() == 'DELETE_FOLDER':
