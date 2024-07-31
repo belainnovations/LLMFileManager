@@ -26,9 +26,20 @@ class FileOperator:
                 return self.error_handler.handle_error(f"File size exceeds maximum allowed size: {file_path}")
         
             file_name = os.path.basename(file_path)
-            file_extension = file_name.split('.')[-1] if '.' in file_name else ''
-            if allowed_extensions and f".{file_extension}" not in allowed_extensions:
+            _, file_extension = os.path.splitext(file_name)
+            file_extension = file_extension[1:] if file_extension else file_name
+            logger.debug(f"Allowed extensions: {allowed_extensions}")
+            logger.debug(f"File name: {file_name}")
+            logger.debug(f"File extension: {file_extension}")
+            logger.debug(f"Checking extension: .{file_extension}")
+            if allowed_extensions and f".{file_extension}" not in allowed_extensions and file_extension not in allowed_extensions:
+                logger.debug(f"Extension not found in allowed list")
                 return self.error_handler.handle_error(f"File extension not allowed: {file_extension}")
+            logger.debug(f"Extension allowed")
+        if action.upper() == 'CREATE_FILE':
+            return self.create_file(file_path, instruction.get('code', ''))
+        elif action.upper() == 'CREATE_FOLDER':
+            return self.create_folder(file_path)
         elif action.upper() == 'DELETE_FILE':
             return self.delete_file(file_path)
         elif action.upper() == 'DELETE_FOLDER':
