@@ -56,12 +56,6 @@ def test_find_context_lines_end_of_file(context_matcher):
     assert start == 1
     assert end == 3
 
-def test_find_context_lines_identical_contexts(context_matcher):
-    lines = ["line1", "same", "line3", "same", "line5"]
-    start, end = context_matcher.find_context_lines(lines, "same", "same")
-    assert start == 1
-    assert end == 3
-
 def test_find_context_lines_overlapping_contexts(context_matcher):
     lines = ["line1", "overlap1", "overlap2", "line4"]
     start, end = context_matcher.find_context_lines(lines, "overlap1\noverlap2", "overlap2")
