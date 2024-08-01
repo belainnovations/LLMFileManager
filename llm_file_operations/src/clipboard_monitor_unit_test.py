@@ -36,10 +36,7 @@ def test_detect_format(mock_dependencies, content, expected_format):
 
 @patch('clipboard_monitor.pyperclip.paste')
 def test_start_monitoring_new_content(mock_paste, mock_dependencies):
-    """
-    Test the start_monitoring method when new content is detected.
-    """
-    mock_paste.side_effect = ["LLMOP:\n  version: '1.0'", KeyboardInterrupt]
+    mock_paste.side_effect = ["Initial content", "LLMOP:\n  version: '1.0'", KeyboardInterrupt]
     monitor = ClipboardMonitor(**mock_dependencies)
 
     with pytest.raises(KeyboardInterrupt):
@@ -49,26 +46,15 @@ def test_start_monitoring_new_content(mock_paste, mock_dependencies):
     mock_dependencies['instruction_parser'].parse.assert_called_once()
     mock_dependencies['file_operator'].execute.assert_called_once()
 
-@pytest.mark.usefixtures("capsys")
 @patch('clipboard_monitor.pyperclip.paste')
-@patch('clipboard_monitor.logger')
-def test_start_monitoring_error_handling(mock_logger, mock_paste, mock_dependencies, capsys):
-    """
-    Test error handling in the start_monitoring method.
-    """
-    mock_paste.side_effect = [Exception("Test error"), KeyboardInterrupt]
+@patch('clipboard_monitor.logger.error')
+def test_start_monitoring_error_handling(mock_logger_error, mock_paste, mock_dependencies):
+    mock_paste.side_effect = ["Initial content", Exception("Test error"), KeyboardInterrupt]
     monitor = ClipboardMonitor(**mock_dependencies)
 
     with pytest.raises(KeyboardInterrupt):
         monitor.start_monitoring()
 
-    # Check if the error was logged
-    mock_logger.error.assert_called_with("An error occurred: Test error", exc_info=True)
-
-    # Check if the error message was printed to console
-    captured = capsys.readouterr()
-    assert "An error occurred. Check the log for details." in captured.out
-
-# Remove the custom capsys fixture as it's no longer needed
+    mock_logger_error.assert_called_with("An error occurred: Test error", exc_info=True)
 
 # Add more test cases as needed

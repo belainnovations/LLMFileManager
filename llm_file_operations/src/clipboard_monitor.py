@@ -16,6 +16,8 @@ class ClipboardMonitor:
     def start_monitoring(self):
         logger.info("Starting clipboard monitoring...")
         check_interval = self.config.get('clipboard_check_interval', 0.5)
+        self.previous_content = pyperclip.paste()
+        logger.debug(f"Initial clipboard content: {self.previous_content[:100]}")
         while True:
             try:
                 clipboard_content = pyperclip.paste()

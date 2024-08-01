@@ -1,7 +1,8 @@
 class Animal:
-    def __init__(self, name, species):
+    def __init__(self, name, species, color):
         self.name = name
         self.species = species
+        self.color = color
 
     def make_sound(self):
         return "Some generic animal sound"

@@ -2,8 +2,7 @@ from animal import Animal
 
 class Cat(Animal):
     def __init__(self, name, color):
-        super().__init__(name, species="Cat")
-        self.color = color
+        super().__init__(name, species="Cat", color=color)
 
     def make_sound(self):
         return "Meow!"

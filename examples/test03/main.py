@@ -4,11 +4,14 @@ from cat import Cat
 
 def main():
     # Create instances of each class
-    generic_animal = Animal("Generic", "Unknown")
-    buddy = Dog("Muddy", "Golden Retriever")
+    generic_animal = Animal("Generic", "Unknown", "Gray")
+    buddy = Dog("Muddy", "Golden Retriever", "Golden")
     whiskers = Cat("Whiskers", "Tabby")
 
     # Demonstrate the use of common methods
+    print(f"{generic_animal} with {generic_animal.color} color")
+    print(f"{buddy} with {buddy.color} fur")
+    print(f"{whiskers}")  # Cat already includes color in its __str__ method
     print(generic_animal)
     print(buddy)
     print(whiskers)

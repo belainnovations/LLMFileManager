@@ -1,8 +1,8 @@
 from animal import Animal
 
 class Dog(Animal):
-    def __init__(self, name, breed):
-        super().__init__(name, species="Dog")
+    def __init__(self, name, breed, color):
+        super().__init__(name, species="Dog", color=color)
         self.breed = breed
 
     def make_sound(self):
