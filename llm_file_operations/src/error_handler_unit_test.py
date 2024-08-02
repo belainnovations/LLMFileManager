@@ -11,10 +11,13 @@ def test_error_handler_initialization(error_handler):
 
 @patch('error_handler.logging.error')
 def test_handle_standard_exception(mock_logging, error_handler, capsys):
-    exception = Exception("Test exception")
-    error_handler.handle(exception)
-    assert len(mock_logging.call_args_list) == 2
-    assert mock_logging.call_args_list[0][0][0] == f"An error occurred: {str(exception)}"
+    try:
+        raise Exception("Test exception")
+    except Exception as e:
+        error_handler.handle(e)
+
+    assert mock_logging.call_count == 2
+    assert "An error occurred: Test exception" in mock_logging.call_args_list[0][0][0]
     assert "Traceback" in mock_logging.call_args_list[1][0][0]
     captured = capsys.readouterr()
     assert "An error occurred. Check the log for details." in captured.out
@@ -23,20 +26,26 @@ def test_handle_standard_exception(mock_logging, error_handler, capsys):
 def test_handle_custom_exception(mock_logging, error_handler, capsys):
     class CustomException(Exception):
         pass
-    exception = CustomException("Custom test exception")
-    error_handler.handle(exception)
-    assert len(mock_logging.call_args_list) == 2
-    assert mock_logging.call_args_list[0][0][0] == f"An error occurred: {str(exception)}"
+    try:
+        raise CustomException("Custom test exception")
+    except CustomException as e:
+        error_handler.handle(e)
+
+    assert mock_logging.call_count == 2
+    assert "An error occurred: Custom test exception" in mock_logging.call_args_list[0][0][0]
     assert "Traceback" in mock_logging.call_args_list[1][0][0]
     captured = capsys.readouterr()
     assert "An error occurred. Check the log for details." in captured.out
 
 @patch('error_handler.logging.error')
 def test_handle_system_exception(mock_logging, error_handler, capsys):
-    exception = FileNotFoundError("File not found")
-    error_handler.handle(exception)
-    assert len(mock_logging.call_args_list) == 2
-    assert mock_logging.call_args_list[0][0][0] == f"An error occurred: {str(exception)}"
+    try:
+        raise FileNotFoundError("File not found")
+    except FileNotFoundError as e:
+        error_handler.handle(e)
+
+    assert mock_logging.call_count == 2
+    assert "An error occurred: File not found" in mock_logging.call_args_list[0][0][0]
     assert "Traceback" in mock_logging.call_args_list[1][0][0]
     captured = capsys.readouterr()
     assert "An error occurred. Check the log for details." in captured.out
@@ -45,35 +54,41 @@ def test_handle_system_exception(mock_logging, error_handler, capsys):
 def test_handle_error_simple_message(mock_logging, error_handler):
     message = "Simple error message"
     result = error_handler.handle_error(message)
-    mock_logging.assert_called_with(message)
+    mock_logging.assert_called_once_with(message)
     assert result == f"Error: {message}"
 
 @patch('error_handler.logging.error')
 def test_handle_error_multiline_message(mock_logging, error_handler):
     message = "Error line 1\nError line 2"
     result = error_handler.handle_error(message)
-    mock_logging.assert_called_with(message)
+    mock_logging.assert_called_once_with(message)
     assert result == f"Error: {message}"
 
 @patch('error_handler.logging.error')
 def test_handle_error_special_characters(mock_logging, error_handler):
     message = "Error: $pecial @haracters!"
     result = error_handler.handle_error(message)
-    mock_logging.assert_called_with(message)
+    mock_logging.assert_called_once_with(message)
     assert result == f"Error: {message}"
 
 @patch('error_handler.logging')
 def test_logging_level(mock_logging, error_handler):
-    error_handler.handle(Exception("Test"))
-    mock_logging.error.assert_called()
+    try:
+        raise Exception("Test")
+    except Exception as e:
+        error_handler.handle(e)
+    assert mock_logging.error.call_count == 2
 
 @patch('error_handler.logging.error')
 @patch('error_handler.traceback.format_exc')
 def test_exception_and_traceback_logged(mock_format_exc, mock_logging, error_handler):
     mock_format_exc.return_value = "Traceback info"
-    test_exception = Exception("Test exception")
-    error_handler.handle(test_exception)
-    mock_logging.assert_any_call(f"An error occurred: {str(test_exception)}")
+    try:
+        raise Exception("Test exception")
+    except Exception as e:
+        error_handler.handle(e)
+    assert mock_logging.call_count == 2
+    mock_logging.assert_any_call("An error occurred: Test exception")
     mock_logging.assert_any_call("Traceback info")
 
 @pytest.mark.parametrize("log_level", ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"])
