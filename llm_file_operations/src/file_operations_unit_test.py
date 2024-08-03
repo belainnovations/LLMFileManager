@@ -1,5 +1,6 @@
 import pytest
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, patch, mock_open
+import shutil
 from file_operations import FileOperator
 
 @pytest.fixture
@@ -26,18 +27,38 @@ def file_operator(mock_context_matcher, mock_error_handler, mock_config):
 
 @patch('os.path.exists')
 @patch('os.makedirs')
-@patch('builtins.open', new_callable=Mock)
-def test_create_file(mock_open, mock_makedirs, mock_exists, file_operator):
+@patch('builtins.open', new_callable=mock_open)
+def test_create_file(mock_file, mock_makedirs, mock_exists, file_operator):
     mock_exists.return_value = False
     file_operator.create_file('test/path/file.txt', 'content')
     mock_makedirs.assert_called_once_with('test/path', exist_ok=True)
-    mock_open.assert_called_once_with('test/path/file.txt', 'w', newline='')
-    mock_open().write.assert_called_once_with('content')
+    mock_file.assert_called_once_with('test/path/file.txt', 'w', newline='')
+    
+    @patch('builtins.open', new_callable=mock_open, read_data='original content')
+    def test_modify_file(mock_file, file_operator, mock_context_matcher):
+        mock_context_matcher.find_context_lines.return_value = (1, 1)
+        instruction = {
+            'start_context': 'original',
+            'end_context': 'content',
+            'code': 'modified content'
+        }
+        file_operator.modify_file('test.txt', 'REPLACE', instruction)
+        mock_file.assert_any_call('test.txt', 'r', newline='')
+        mock_file.assert_any_call('test.txt', 'w', newline='')
+        mock_file().write.assert_called_with('modified content')
+    mock_file().write.assert_called_once_with('content')
 
 @patch('os.makedirs')
 def test_create_folder(mock_makedirs, file_operator):
     file_operator.create_folder('test/folder')
     mock_makedirs.assert_called_once_with('test/folder', exist_ok=True)
+
+@patch('os.path.exists')
+@patch('shutil.rmtree')
+def test_delete_folder(mock_rmtree, mock_exists, file_operator):
+    mock_exists.return_value = True
+    file_operator.delete_folder('test/folder')
+    mock_rmtree.assert_called_once_with('test/folder')
 
 @patch('os.path.exists')
 @patch('os.remove')
