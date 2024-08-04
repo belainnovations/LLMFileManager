@@ -261,64 +261,6 @@ import logging
 Explanation: This command correctly inserts new import statements at the beginning of the file, before the existing imports, without duplicating any import statements.
 
 
-Example: Inserting in the middle of a file
-
-Before:
-
-```python
-def existing_function1():
-    pass
-# comment before 2nd function
-def existing_function2():
-    pass
-
-def existing_function3():
-    pass
-
-# End of file
-```
-
-LLMOP Command:
-
-```yaml
-LLMOP:
-  version: "1.0"
-  action: INSERT
-  file: example.py
-  language: python
-  description: Insert a new function before the existing one
-  execution_key: "EXECUTE_LLM_INSTRUCTION"
-  start_context: |-
-    # comment before 2nd function
-    def existing_function2():
-  code: |-
-    def new_function():
-        print("This is a new function")
-
-```
-
-After:
-
-```python
-def existing_function1():
-    pass
-
-def new_function():
-    print("This is a new function")
-
-# comment before 2nd function
-def existing_function2():
-    pass
-
-def existing_function3():
-    pass
-
-# End of file
-```
-
-Explanation: This example demonstrates that the INSERT operation adds the new function immediately before the line specified in the start_context. The start_context line itself is not modified or repeated in the inserted code. This ensures that the new content is inserted at the correct location without duplicating any existing code. It's crucial to understand that the start_context is used as a reference point for insertion, not as part of the inserted content.
-
-
 Negative Example:
 
 ```yaml
@@ -533,37 +475,6 @@ For empty files, use CREATE_FILE action instead of REPLACE or INSERT.
 
 Include enough context to uniquely identify the target location, even if it means using longer contexts.
 
-## Choosing the Appropriate Action Type
-
-When selecting an action type for file modifications, consider the following guidelines:
-
-1. Use INSERT for adding new content:
-   - Adding imports at the beginning of a file
-   - Introducing new functions or classes
-   - Appending content to the end of a file
-
-2. Use narrow REPLACE for updating specific sections:
-   - Modifying existing functions or methods
-   - Updating configuration parameters
-   - Changing small portions of code
-
-3. Use full file REPLACE when:
-   - Making comprehensive updates to a file
-   - Ensuring complete file consistency is crucial
-   - Dealing with small files where partial updates might be more complex
-
-4. Prefer targeted operations (INSERT or narrow REPLACE) over full file replacements when possible:
-   - Reduces risk of unintended modifications
-   - Improves transparency and ease of review
-   - Enhances performance for larger files
-
-5. Always use the most precise context possible:
-   - For INSERT, choose the exact insertion point
-   - For REPLACE, use the shortest unique line region that includes the target section
-
-By following these guidelines, you can achieve more accurate and efficient file modifications while minimizing the risk of errors or unintended changes.
-
-## Best Practices
 ## Best Practices
 
 1. Ensure context uniqueness within the file.
