@@ -1,6 +1,7 @@
 let scene, camera, renderer, world;
 const balls = [];
 const MAX_BALLS = 5;
+let currentGravity = -0.1;
 
 function init() {
     scene = new THREE.Scene();
@@ -10,7 +11,7 @@ function init() {
     document.getElementById('scene-container').appendChild(renderer.domElement);
 
     world = new CANNON.World();
-    world.gravity.set(0, -0.1, 0);
+    world.gravity.set(0, currentGravity, 0);
 
     camera.position.z = 10;
 
@@ -21,20 +22,29 @@ function init() {
     const ambientLight = new THREE.AmbientLight(0x404040);
     scene.add(ambientLight);
 
-    // Add event listener for mouse click
     renderer.domElement.addEventListener('click', onMouseClick, false);
+    renderer.domElement.addEventListener('wheel', onMouseWheel, false);
 
     animate();
 }
 
 function onMouseClick(event) {
-    // Calculate mouse position in normalized device coordinates
     const mouse = new THREE.Vector2();
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-    // Create a ball at the clicked position
     addBall(mouse);
+}
+
+function onMouseWheel(event) {
+    event.preventDefault();
+    if (event.deltaY < 0) {
+        // Scrolling up, increase gravity
+        currentGravity *= 1.25;
+    } else {
+        // Scrolling down, decrease gravity
+        currentGravity *= 0.75;
+    }
+    world.gravity.set(0, currentGravity, 0);
 }
 
 function addBall(mousePosition) {
@@ -54,7 +64,6 @@ function addBall(mousePosition) {
                 shape: ballShape,
             });
 
-            // Calculate ball position based on mouse click
             const vector = new THREE.Vector3(mousePosition.x, mousePosition.y, 0.5);
             vector.unproject(camera);
             const dir = vector.sub(camera.position).normalize();
