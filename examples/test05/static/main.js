@@ -1,4 +1,4 @@
-let scene, camera, renderer, world, controls;
+let scene, camera, renderer, world;
 const balls = [];
 const MAX_BALLS = 5;
 
@@ -9,23 +9,16 @@ function init() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.getElementById('scene-container').appendChild(renderer.domElement);
 
-    // Add OrbitControls
-    controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.25;
-    controls.screenSpacePanning = false;
-    controls.maxPolarAngle = Math.PI / 2;
-
     world = new CANNON.World();
     world.gravity.set(0, -0.1, 0);
 
-    camera.position.set(0, 5, 15);
-    controls.update();
+    camera.position.z = 10;  // Increased camera distance for better visibility
 
     const light = new THREE.PointLight(0xffffff, 1, 100);
-    light.position.set(0, 10, 10);
+    light.position.set(0, 0, 10);
     scene.add(light);
 
+    // Add ambient light for better visibility
     const ambientLight = new THREE.AmbientLight(0x404040);
     scene.add(ambientLight);
 
@@ -75,7 +68,6 @@ function animate() {
         ball.mesh.position.copy(ball.body.position);
         ball.mesh.quaternion.copy(ball.body.quaternion);
     });
-    controls.update();
     renderer.render(scene, camera);
 }
 
