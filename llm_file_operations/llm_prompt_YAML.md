@@ -145,6 +145,56 @@ LLMOP:
 
 In this example, the entire function from its definition to the return statement will be replaced.
 
+
+## Example: Precise Context Selection for INSERT
+
+Consider the following file content:
+
+```python
+import pytest
+from main import main
+
+# Add your unit tests for the main function here
+```
+
+To insert new imports and tests after the existing imports but before the comment, use this LLMOP command:
+
+```yaml
+LLMOP:
+  version: "1.0"
+  action: INSERT
+  file: example_file.py
+  language: python
+  description: Add new imports and tests
+  execution_key: "EXECUTE_LLM_INSTRUCTION"
+  start_context: |-
+    
+    # Add your unit tests for the main function here
+  code: |-
+    import yaml
+    from unittest.mock import patch, mock_open
+
+    def test_new_functionality():
+        # Test code here
+        pass
+```
+
+After execution, the file will look like this:
+
+```python
+import pytest
+from main import main
+import yaml
+from unittest.mock import patch, mock_open
+
+def test_new_functionality():
+    # Test code here
+    pass
+
+# Add your unit tests for the main function here
+```
+
+This example demonstrates how to precisely select the insertion point to maintain the desired file structure.
 Remember, precise context selection is key to accurate and safe file modifications.
 ## Detailed Context Selection Guidelines:
 
@@ -155,7 +205,7 @@ When selecting contexts for your LLMOP commands, consider the following:
    - Include enough lines to guarantee uniqueness.
 
 2. Precision: Be as precise as possible to target the exact location.
-   - For functions, use the function definition as start_context and the last line as end_context.
+   - For functions, use the function definition (including anything else that belongs to the function, for example decorators) as start_context and the last line as end_context.
    - For class methods, include the class name and method definition.
 
 3. Line Numbers: Pay attention to line numbers, especially for REPLACE and DELETE actions.
@@ -163,7 +213,7 @@ When selecting contexts for your LLMOP commands, consider the following:
    - The last line of end_context is the last line to be affected.
 
 4. Nested Structures: For nested functions or classes, provide sufficient context.
-   - Include parent class or function names to avoid ambiguity.
+   - Include parent class or function names, if needed, to avoid ambiguity.
 
 5. Comments and Docstrings: Utilize unique comments or docstrings as part of your context.
    - These can provide clear markers for start and end points.
