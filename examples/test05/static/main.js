@@ -12,21 +12,32 @@ function init() {
     world = new CANNON.World();
     world.gravity.set(0, -0.1, 0);
 
-    camera.position.z = 10;  // Increased camera distance for better visibility
+    camera.position.z = 10;
 
     const light = new THREE.PointLight(0xffffff, 1, 100);
     light.position.set(0, 0, 10);
     scene.add(light);
 
-    // Add ambient light for better visibility
     const ambientLight = new THREE.AmbientLight(0x404040);
     scene.add(ambientLight);
 
-    setInterval(addBall, 1000);
+    // Add event listener for mouse click
+    renderer.domElement.addEventListener('click', onMouseClick, false);
+
     animate();
 }
 
-function addBall() {
+function onMouseClick(event) {
+    // Calculate mouse position in normalized device coordinates
+    const mouse = new THREE.Vector2();
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    // Create a ball at the clicked position
+    addBall(mouse);
+}
+
+function addBall(mousePosition) {
     if (balls.length >= MAX_BALLS) {
         const oldestBall = balls.shift();
         scene.remove(oldestBall.mesh);
@@ -42,11 +53,15 @@ function addBall() {
                 mass: 1,
                 shape: ballShape,
             });
-            ballBody.position.set(
-                Math.random() * 8 - 4,
-                Math.random() * 8 + 4,
-                Math.random() * 8 - 4
-            );
+
+            // Calculate ball position based on mouse click
+            const vector = new THREE.Vector3(mousePosition.x, mousePosition.y, 0.5);
+            vector.unproject(camera);
+            const dir = vector.sub(camera.position).normalize();
+            const distance = -camera.position.z / dir.z;
+            const pos = camera.position.clone().add(dir.multiplyScalar(distance));
+
+            ballBody.position.copy(pos);
             world.addBody(ballBody);
 
             const ballGeometry = new THREE.SphereGeometry(radius, 32, 32);
@@ -55,6 +70,7 @@ function addBall() {
                 shininess: 100
             });
             const ballMesh = new THREE.Mesh(ballGeometry, ballMaterial);
+            ballMesh.position.copy(pos);
             scene.add(ballMesh);
 
             balls.push({ body: ballBody, mesh: ballMesh });
