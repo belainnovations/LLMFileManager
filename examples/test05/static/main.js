@@ -2,6 +2,7 @@ let scene, camera, renderer, world;
 const balls = [];
 const MAX_BALLS = 5;
 let currentGravity = -0.1;
+let currentOpacity = 1.0;
 
 function init() {
     scene = new THREE.Scene();
@@ -24,6 +25,7 @@ function init() {
 
     renderer.domElement.addEventListener('click', onMouseClick, false);
     renderer.domElement.addEventListener('wheel', onMouseWheel, false);
+    window.addEventListener('keydown', onKeyDown, false);
 
     animate();
 }
@@ -38,13 +40,28 @@ function onMouseClick(event) {
 function onMouseWheel(event) {
     event.preventDefault();
     if (event.deltaY < 0) {
-        // Scrolling up, increase gravity
         currentGravity *= 1.25;
     } else {
-        // Scrolling down, decrease gravity
         currentGravity *= 0.75;
     }
     world.gravity.set(0, currentGravity, 0);
+}
+
+function onKeyDown(event) {
+    if (event.key === 'ArrowUp') {
+        currentOpacity = Math.min(currentOpacity + 0.1, 1.0);
+        updateBallOpacity();
+    } else if (event.key === 'ArrowDown') {
+        currentOpacity = Math.max(currentOpacity - 0.1, 0.0);
+        updateBallOpacity();
+    }
+}
+
+function updateBallOpacity() {
+    balls.forEach(ball => {
+        ball.mesh.material.opacity = currentOpacity;
+        ball.mesh.material.transparent = currentOpacity < 1.0;
+    });
 }
 
 function addBall(mousePosition) {
@@ -76,7 +93,9 @@ function addBall(mousePosition) {
             const ballGeometry = new THREE.SphereGeometry(radius, 32, 32);
             const ballMaterial = new THREE.MeshPhongMaterial({ 
                 color: Math.random() * 0xffffff,
-                shininess: 100
+                shininess: 100,
+                opacity: currentOpacity,
+                transparent: currentOpacity < 1.0
             });
             const ballMesh = new THREE.Mesh(ballGeometry, ballMaterial);
             ballMesh.position.copy(pos);
