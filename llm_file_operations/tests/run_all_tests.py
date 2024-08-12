@@ -46,7 +46,8 @@ for _ in range(5):
     output_buffer = StringIO()
     sys.stdout = output_buffer
 
-    exit_code = pytest.main(["-v", "--tb=short", "src", "--ignore=tests/llm_interface"])
+    # Include src, integration_tests, and system_tests directories
+    exit_code = pytest.main(["-v", "--tb=short", "src", "tests/integration_tests", "tests/system_tests", "--ignore=tests/llm_interface"])
 
     sys.stdout = sys.__stdout__
     output = output_buffer.getvalue()
@@ -70,8 +71,8 @@ if all(code == ExitCode.OK for code in all_exit_codes):
 else:
     print("Some test runs failed. Check the test report for details.")
 
-    # Run all tests in the src directory, excluding the llm_interface subproject
-    exit_code = pytest.main(["-v", "--tb=short", "src", "--ignore=tests/llm_interface"])
+    # Run all tests in the src directory, integration_tests, and system_tests, excluding the llm_interface subproject
+    exit_code = pytest.main(["-v", "--tb=short", "src", "tests/integration_tests", "tests/system_tests", "--ignore=tests/llm_interface"])
 
     # Print the result
     if exit_code == ExitCode.OK:

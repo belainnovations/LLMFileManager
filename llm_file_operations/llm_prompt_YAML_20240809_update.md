@@ -621,6 +621,7 @@ By following these guidelines, you'll maintain the integrity of code structures 
 3. Using INSERT when REPLACE is needed (e.g., for end-of-file additions).
 4. Forgetting to include necessary sections (e.g., code for CREATE_FILE).
 5. Incorrect indentation in the YAML structure or code section.
+6. When creating or modifying files, always include the full, executable code. Avoid using placeholder comments or partial implementations. If a function or section of code is extensive, consider breaking it into smaller, more manageable LLMOP commands rather than using placeholders.
 
 Remember, precise context selection is key to accurate and safe file modifications.
 
