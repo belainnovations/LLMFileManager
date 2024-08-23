@@ -6,6 +6,7 @@ anthropic
 pytest
 pytest-mock
 pytest-cov
+pytest-timeout
 
 # Development tools
 black
