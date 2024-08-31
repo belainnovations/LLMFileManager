@@ -8,6 +8,7 @@ import logging
 import threading
 import time
 import ctypes
+import pyperclip
 
 logger = logging.getLogger(__name__)
 
@@ -40,13 +41,19 @@ def cleanup():
         if thread.is_alive():
             logger.warning(f"Forcefully terminating thread: {thread.name}")
             terminate_thread(thread)
-    logging.getLogger().handlers.clear()
+
+@pytest.fixture(autouse=True)
+def clear_clipboard():
+    pyperclip.copy('')
+    yield
+    pyperclip.copy('')
 
 def test_error_propagation(mock_components, caplog):
     caplog.set_level(logging.DEBUG)
     mock_components['instruction_parser'].parse.side_effect = ValueError("Invalid instruction format")
 
     stop_event = threading.Event()
+    error_logged_event = threading.Event()
 
     def monitored_start_monitoring():
         monitor = ClipboardMonitor(**mock_components)
@@ -55,8 +62,11 @@ def test_error_propagation(mock_components, caplog):
                 try:
                     monitor.start_monitoring()
                 except ValueError as e:
-                    logger.error(f"Expected error: {str(e)}")
+                    logger.error(f"An error occurred: {str(e)}")
+                    error_logged_event.set()
                 stop_event.wait(0.1)
+        except SystemExit:
+            logger.info("Monitoring stopped")
         except Exception as e:
             logger.error(f"Unexpected error in monitored_start_monitoring: {str(e)}")
 
@@ -64,8 +74,10 @@ def test_error_propagation(mock_components, caplog):
     thread.start()
 
     # Simulate clipboard change to trigger parsing
-    with patch('pyperclip.paste', return_value="LLMOP: invalid content"):
-        time.sleep(1)  # Allow time for the monitor to process the clipboard
+    pyperclip.copy("LLMOP: invalid content")
+
+    # Wait for the error to be logged or timeout after 5 seconds
+    error_logged = error_logged_event.wait(timeout=5)
 
     stop_event.set()
     thread.join(timeout=5)
@@ -74,7 +86,8 @@ def test_error_propagation(mock_components, caplog):
         terminate_thread(thread)
 
     print(f"Captured logs: {caplog.text}")
-    assert "Expected error: Invalid instruction format" in caplog.text
+    assert error_logged, "Error was not logged within the expected timeframe"
+    assert "An error occurred: Invalid instruction format" in caplog.text
     assert mock_components['instruction_parser'].parse.called
     assert mock_components['instruction_parser'].parse.call_count > 0
 
