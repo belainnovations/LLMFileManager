@@ -1,6 +1,7 @@
 pyperclip
 pyyaml
 anthropic
+tenacity
 
 # Testing dependencies
 pytest
