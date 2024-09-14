@@ -6,7 +6,7 @@ from tenacity import retry, stop_after_attempt, wait_fixed
 
 logger = logging.getLogger(__name__)
 
-@retry(stop=stop_after_attempt(3), wait=wait_fixed(0.1))
+@retry(stop=stop_after_attempt(5), wait=wait_fixed(0.25))
 def safe_paste():
     return pyperclip.paste()
 
