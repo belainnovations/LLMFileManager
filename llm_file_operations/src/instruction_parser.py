@@ -58,15 +58,15 @@ class InstructionParser:
         if 'LLMOP' not in parsed_yaml:
             logger.error("Missing LLMOP key in YAML")
             return False
-        
+
         required_fields = ['version', 'action', 'file', 'description', 'execution_key']
         llmop_content = parsed_yaml['LLMOP']
-        
+
         for field in required_fields:
             if field.lower() not in llmop_content:
                 logger.error(f"Missing required field in YAML: {field}")
                 return False
-        
+
         action = llmop_content['action'].upper()
         valid_actions = ['CREATE_FILE', 'CREATE_FOLDER', 'REPLACE', 'INSERT', 'DELETE', 'DELETE_FILE', 'DELETE_FOLDER']
         if action not in valid_actions:
@@ -80,6 +80,7 @@ class InstructionParser:
 
         logger.debug("YAML structure validation successful")
         return True
+
     def convert_yaml_to_instruction(self, parsed_yaml):
         if 'LLMOP' not in parsed_yaml:
             logger.error("Missing LLMOP key in parsed YAML")
@@ -102,7 +103,7 @@ class InstructionParser:
     def extract_context(self, clipboard_text, start_marker, end_marker, preserve_indentation=False):
         pattern = f'{re.escape(start_marker)}(.*?){re.escape(end_marker)}'
         match = re.search(pattern, clipboard_text, re.DOTALL)
-        
+
         if match:
             content = match.group(1)
             if preserve_indentation:
