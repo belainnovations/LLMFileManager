@@ -2,11 +2,11 @@ import pyperclip
 import time
 import logging
 import binascii
-from tenacity import retry, stop_after_attempt, wait_fixed
+from tenacity import retry, stop_after_attempt, wait_fixed, RetryError
 
 logger = logging.getLogger(__name__)
 
-@retry(stop=stop_after_attempt(5), wait=wait_fixed(0.25))
+@retry(stop=stop_after_attempt(3), wait=wait_fixed(1))
 def safe_paste():
     return pyperclip.paste()
 
@@ -21,11 +21,19 @@ class ClipboardMonitor:
     def start_monitoring(self):
         logger.info("Starting clipboard monitoring...")
         check_interval = self.config.get('clipboard_check_interval', 0.5)
-        self.previous_content = safe_paste()
-        logger.debug(f"Initial clipboard content: {self.previous_content[:100]}")
+        try:
+            self.previous_content = safe_paste()
+            logger.debug(f"Initial clipboard content: {self.previous_content[:100]}")
+        except RetryError as e:
+            logger.debug(f"Failed to read initial clipboard content: {str(e)}")
+            self.previous_content = ''
         while True:
             try:
-                clipboard_content = safe_paste()
+                try:
+                    clipboard_content = safe_paste()
+                except RetryError as e:
+                    logger.debug(f"Failed to read clipboard: {str(e)}")
+                    continue
                 if clipboard_content != self.previous_content:
                     logger.debug(f"New clipboard content detected. Length: {len(clipboard_content)}")
                     logger.debug(f"First 100 chars: {clipboard_content[:100]}")

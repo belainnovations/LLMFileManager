@@ -8,8 +8,14 @@ from clipboard_monitor import ClipboardMonitor
 from context_matcher import ContextMatcher
 from error_handler import ErrorHandler
 
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
+def load_config():
+    config_path = get_config_path()
+    try:
+        with open(config_path, 'r') as config_file:
+            return yaml.safe_load(config_file)
+    except FileNotFoundError:
+        print(f"Config file not found at {config_path}. Using default configuration.")
+        return {}  # Return default configuration or raise an error as appropriate
 
 def get_config_path():
     if getattr(sys, 'frozen', False):
@@ -24,14 +30,10 @@ def get_config_path():
     print(f"Looking for config file at: {config_path}")  # Debug print
     return config_path
 
-def load_config():
-    config_path = get_config_path()
-    try:
-        with open(config_path, 'r') as config_file:
-            return yaml.safe_load(config_file)
-    except FileNotFoundError:
-        print(f"Config file not found at {config_path}. Using default configuration.")
-        return {}  # Return default configuration or raise an error as appropriate
+config = load_config()
+logging_level = config.get('logging', {}).get('level', 'INFO')
+logging.basicConfig(level=getattr(logging, logging_level), format=config.get('logging', {}).get('format', '%(asctime)s - %(levelname)s - %(message)s'))
+logger = logging.getLogger(__name__)
 
 def main():
     logger.info("Starting LLM File Operations")
