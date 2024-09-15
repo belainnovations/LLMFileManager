@@ -149,9 +149,8 @@ class FileOperator:
 
             logger.debug(f"Modified lines: {lines}")
 
-            with open(file_path, 'w', newline='') as f:
+            with open(file_path, 'w', newline='', encoding='utf-8') as f:
                 f.writelines(lines)
-
             logger.info(f"Successfully performed {action} operation on {file_path}")
             return f"Successfully performed {action} operation on {file_path}"
         except Exception as e:
