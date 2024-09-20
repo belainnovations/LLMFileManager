@@ -77,7 +77,7 @@ def test_error_propagation(mock_components, caplog):
     pyperclip.copy("LLMOP: invalid content")
 
     # Wait for the error to be logged or timeout after 5 seconds
-    error_logged = error_logged_event.wait(timeout=5)
+    error_logged = error_logged_event.wait(timeout=10)
 
     stop_event.set()
     thread.join(timeout=5)

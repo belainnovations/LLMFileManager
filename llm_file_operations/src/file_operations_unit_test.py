@@ -44,7 +44,7 @@ def test_modify_file_replace(mock_file, file_operator, mock_context_matcher):
     }
     file_operator.modify_file('test.txt', 'REPLACE', instruction)
     mock_file.assert_any_call('test.txt', 'r', newline='')
-    mock_file.assert_any_call('test.txt', 'w', newline='')
+    mock_file.assert_any_call('test.txt', 'w', newline='', encoding='utf-8')
     mock_file().writelines.assert_called_once_with(['line1\n', 'new line2\n', 'new line3\n'])
 
 @patch('builtins.open', new_callable=mock_open, read_data='line1\nline2\nline3\n')
@@ -56,7 +56,7 @@ def test_modify_file_insert(mock_file, file_operator, mock_context_matcher):
     }
     file_operator.modify_file('test.txt', 'INSERT', instruction)
     mock_file.assert_any_call('test.txt', 'r', newline='')
-    mock_file.assert_any_call('test.txt', 'w', newline='')
+    mock_file.assert_any_call('test.txt', 'w', newline='', encoding='utf-8')
     mock_file().writelines.assert_called_once_with(['line1\n', 'new line\n', 'line2\n', 'line3\n'])
 
 @patch('builtins.open', new_callable=mock_open, read_data='line1\nline2\nline3\nline4\n')
@@ -68,7 +68,7 @@ def test_modify_file_delete(mock_file, file_operator, mock_context_matcher):
     }
     file_operator.modify_file('test.txt', 'DELETE', instruction)
     mock_file.assert_any_call('test.txt', 'r', newline='')
-    mock_file.assert_any_call('test.txt', 'w', newline='')
+    mock_file.assert_any_call('test.txt', 'w', newline='', encoding='utf-8')
     mock_file().writelines.assert_called_once_with(['line1\n', 'line4\n'])
 @patch('os.path.exists')
 @patch('shutil.rmtree')

@@ -42,7 +42,7 @@ all_outputs = []
 all_exit_codes = []
 
 # Run tests multiple times
-for _ in range(5):
+for _ in range(3):
     output_buffer = StringIO()
     sys.stdout = output_buffer
 

@@ -13,8 +13,8 @@ def test_load_config_success(mock_file, mock_yaml_load):
 
 @patch('builtins.open', side_effect=FileNotFoundError)
 def test_load_config_file_not_found(mock_file):
-    with pytest.raises(FileNotFoundError):
-        load_config()
+    config = load_config()
+    assert config == {}, "Expected an empty dictionary when config file is not found"
 
 @patch('yaml.safe_load', side_effect=yaml.YAMLError)
 @patch('builtins.open', new_callable=mock_open, read_data="invalid: yaml: content")

@@ -1,5 +1,7 @@
 import pytest
 from unittest.mock import Mock, patch
+import threading
+import time
 from clipboard_monitor import ClipboardMonitor
 
 @pytest.fixture
@@ -49,12 +51,24 @@ def test_start_monitoring_new_content(mock_paste, mock_dependencies):
 @patch('clipboard_monitor.pyperclip.paste')
 @patch('clipboard_monitor.logger.error')
 def test_start_monitoring_error_handling(mock_logger_error, mock_paste, mock_dependencies):
+    error_logged = threading.Event()
+    mock_logger_error.side_effect = lambda *args, **kwargs: error_logged.set()
     mock_paste.side_effect = ["Initial content", Exception("Test error"), KeyboardInterrupt]
     monitor = ClipboardMonitor(**mock_dependencies)
+
+    def delayed_interrupt():
+        if not error_logged.wait(timeout=2.0):
+            raise TimeoutError("Error was not logged within the expected timeframe")
+        raise KeyboardInterrupt
+
+    interrupt_thread = threading.Thread(target=delayed_interrupt)
+    interrupt_thread.start()
 
     with pytest.raises(KeyboardInterrupt):
         monitor.start_monitoring()
 
+    interrupt_thread.join(timeout=1.0)
+    assert error_logged.is_set(), "Error was not logged"
     mock_logger_error.assert_called_with("An error occurred: Test error", exc_info=True)
 
 # Add more test cases as needed

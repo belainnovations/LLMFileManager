@@ -27,8 +27,8 @@ LLMOP:
 ### CREATE_FILE
 
 - Creates a new file
-- Requires only theÂ `code`Â section
-- NoÂ `start_context`Â orÂ `end_context`Â needed
+- Requires only the `code` section
+- No `start_context` or `end_context` needed
 
 Example: Before (File doesn't exist)
 
@@ -74,12 +74,12 @@ LLMOP:
   execution_key: "EXECUTE_LLM_INSTRUCTION"
 ```
 
-Explanation: This command will fail because it's missing the requiredÂ `code`Â section for CREATE_FILE action.
+Explanation: This command will fail because it's missing the required `code` section for CREATE_FILE action.
 
 ### CREATE_FOLDER
 
 - Creates a new folder
-- Doesn't requireÂ `start_context`,Â `end_context`, orÂ `code`Â sections
+- Doesn't require `start_context`, `end_context`, or `code` sections
 
 Example: Before (Folder doesn't exist)
 
@@ -101,7 +101,7 @@ Explanation: This command creates a new empty folder.
 ### REPLACE
 
 - Replaces a section of an existing file
-- Requires bothÂ `start_context`Â andÂ `end_context`
+- Requires both `start_context` and `end_context`
 - Contexts must uniquely identify the section to be replaced
 
 Example: Before:
@@ -171,8 +171,8 @@ Explanation: This command may lead to unintended modifications if there are mult
 ### INSERT
 
 - Inserts code at a specific point in the file
-- Requires only theÂ `start_context`
-- New code is inserted immediately before theÂ `start_context`
+- Requires only the `start_context`
+- New code is inserted immediately before the `start_context`
 
 Example:
 Before:
@@ -378,7 +378,7 @@ LLMOP:
 ### DELETE
 
 - Removes a section of code from a file
-- Requires bothÂ `start_context`Â andÂ `end_context`
+- Requires both `start_context` and `end_context`
 - Both contexts must uniquely identify the section to be deleted
 
 Example: Before:
@@ -426,7 +426,7 @@ Explanation: This command deletes the function_to_delete and any content between
 ### DELETE_FILE
 
 - Deletes a specific file
-- Doesn't requireÂ `start_context`,Â `end_context`, orÂ `code`Â sections
+- Doesn't require `start_context`, `end_context`, or `code` sections
 
 Example: Before: File 'to_delete.py' exists
 
@@ -448,7 +448,7 @@ Explanation: This command deletes the specified file.
 ### DELETE_FOLDER
 
 - Deletes a folder and all its contents
-- Doesn't requireÂ `start_context`,Â `end_context`, orÂ `code`Â sections
+- Doesn't require `start_context`, `end_context`, or `code` sections
 
 Example: Before: Folder 'old_folder' exists
 
@@ -564,14 +564,6 @@ When selecting an action type for file modifications, consider the following gui
 By following these guidelines, you can achieve more accurate and efficient file modifications while minimizing the risk of errors or unintended changes.
 
 
-
-### Minimal and Precise Context Selection
-
-When selecting contexts for LLMOP commands:
-- Choose the shortest unique line region that includes the target section.
-- Review the existing file structure before creating the command.
-- Avoid overly broad context selections that may lead to unintended modifications.
-- Ensure that your start_context and end_context precisely frame the intended change area.
 ## Context Selection Guidelines
 
 ### Handling Decorators
